@@ -1,17 +1,18 @@
 package models;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Attendance {
 
-    private int id;
-    private int studentId;
-    private int teacherId;
-    private Date date;
-    private AttendanceStatusEnum status;
+    private long id;
+    private long studentId;
+    private long teacherId;
+    private long subjectId;
+    private LocalDate date;
+    private AttendanceStatusEnum.Status status;
     private String comment; // Adding comments due to absence (Optionally)
 
-    public Attendance(int id, int studentId, int teacherId, Date date, AttendanceStatusEnum status, String comment) {
+    public Attendance(long id, long studentId, long teacherId, long subjectId, LocalDate date, AttendanceStatusEnum.Status status, String comment) {
         this.id = id;
         this.studentId = studentId;
         this.teacherId = teacherId;
@@ -20,39 +21,47 @@ public class Attendance {
         this.comment = comment;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public int getStudentId() {
+    public long getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(int studentId) {
+    public void setStudentId(long studentId) {
         this.studentId = studentId;
     }
 
-    public int getTeacherId() {
+    public long getTeacherId() {
         return teacherId;
     }
 
-    public void setTeacherId(int teacherId) {
+    public void setTeacherId(long teacherId) {
         this.teacherId = teacherId;
     }
 
-    public Date getDate() {
+    public long getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(long subjectId) {
+        this.subjectId = subjectId;
+    }
+
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public AttendanceStatusEnum getStatus() {
+    public AttendanceStatusEnum.Status getStatus() {
         return status;
     }
 

@@ -7,4 +7,12 @@ public class AttendanceStatusEnum {
         ABSENT, // Отсутствовал на занятии
         VALID_REASON
     }
+
+    public static Status valueOfStatus(String status) {
+        try {
+            return Status.valueOf(status);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Неверное значение статуса: " + status);
+        }
+    }
 }
