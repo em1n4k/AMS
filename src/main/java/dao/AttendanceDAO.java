@@ -2,7 +2,7 @@ package dao;
 
 import database.DatabaseConnection;
 import models.Attendance;
-import models.AttendanceStatusEnum;
+import models.AttendanceStatus;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -29,7 +29,7 @@ public class AttendanceDAO {
                         resultSet.getLong("teacher_id"),
                         resultSet.getLong("subject_id"),
                         resultSet.getDate("date").toLocalDate(),
-                        AttendanceStatusEnum.valueOfStatus(resultSet.getString("status")),
+                        AttendanceStatus.valueOfStatus(resultSet.getString("status")),
                         resultSet.getString("comment")
                 ));
             }

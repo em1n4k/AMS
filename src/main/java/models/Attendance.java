@@ -9,13 +9,14 @@ public class Attendance {
     private long teacherId;
     private long subjectId;
     private LocalDate date;
-    private AttendanceStatusEnum.Status status;
+    private AttendanceStatus status;
     private String comment; // Adding comments due to absence (Optionally)
 
-    public Attendance(long id, long studentId, long teacherId, long subjectId, LocalDate date, AttendanceStatusEnum.Status status, String comment) {
+    public Attendance(long id, long studentId, long teacherId, long subjectId, LocalDate date, AttendanceStatus status, String comment) {
         this.id = id;
         this.studentId = studentId;
         this.teacherId = teacherId;
+        this.subjectId = subjectId;
         this.date = date;
         this.status = status;
         this.comment = comment;
@@ -61,8 +62,12 @@ public class Attendance {
         this.date = date;
     }
 
-    public AttendanceStatusEnum.Status getStatus() {
+    public AttendanceStatus getStatus() {
         return status;
+    }
+
+    public void setStatus(AttendanceStatus status) {
+        this.status = status;
     }
 
     public String getComment() {
@@ -75,7 +80,21 @@ public class Attendance {
 
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Attendance that = (Attendance) obj;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Long.hashCode(id);
+    }
+
+
+    @Override
     public String toString() {
-        return "Attendance{" + "id=" + id + ", studentId=" + studentId + ", teacherId=" + teacherId + ", date=" + date + ", status=" + status + ", comment=" + comment + '\'' + '}';
+        return "Attendance{" + "id=" + id + ", studentId=" + studentId + ", teacherId=" + teacherId + ", date=" + date + ", status=" + status + ", comment='" + (comment != null ? comment : "Нет комментария") + '\'' + '}';
     }
 }

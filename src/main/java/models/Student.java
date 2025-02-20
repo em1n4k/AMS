@@ -5,11 +5,11 @@ public class Student {
     private String firstName;
     private String lastName;
     private String email;
-    private int id;
+    private long id;
     private String facultyNumber;
     private String attendance;
 
-    public Student(int id, String firstName, String lastName, String email, String facultyNumber, String attendance) {
+    public Student(long id, String firstName, String lastName, String email, String facultyNumber, String attendance) {
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -18,11 +18,11 @@ public class Student {
         this.attendance = attendance;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
