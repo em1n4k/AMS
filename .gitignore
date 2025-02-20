@@ -48,5 +48,4 @@ Thumbs.db
 ### Confidential files ###
 config.properties
 *.env
-DatabaseConnection.java
 
