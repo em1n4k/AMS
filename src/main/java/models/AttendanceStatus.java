@@ -12,15 +12,20 @@ public enum AttendanceStatus {
         this.displayName = displayName;
     }
 
+    public static AttendanceStatus valueOfStatus(String status) {
+        return null;
+    }
+
     public String getDisplayName() {
         return displayName;
     }
 
-    public static AttendanceStatus valueOfStatus(String status) {
-        try {
-            return AttendanceStatus.valueOf(status.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Неверное значение статуса: " + status);
+    public static AttendanceStatus fromDisplayName(String displayName) {
+        for (AttendanceStatus status : values()) {
+            if (status.displayName.equals(displayName)) {
+                return status;
+            }
         }
+        throw new IllegalArgumentException("Неверный статус " + displayName);
     }
 }

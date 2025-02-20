@@ -1,52 +1,17 @@
 package dao;
 
-import database.DatabaseConnection;
+import models.Student;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public abstract class BaseDAO<T> {
+public interface BaseDAO<T> {
+    List<T> getAll(); // Read
 
-    protected abstract T mapResultSetToEntity(ResultSet resultSet) throws SQLException;
+    void add(T entity); // Create
 
-    protected List<T> executeQuery(String query, Object... parameters) {
+    void update(T entity, String[] params); // Update
 
-        List<T> resultList = new ArrayList<>();
+    void delete(T entity); // Delete
 
-        try (Connection connection = DatabaseConnection.getConnection();
-        PreparedStatement statement = connection.prepareStatement(query)) {
-
-            setParameters(statement,parameters);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                resultList.add(mapResultSetToEntity(resultSet));
-            }
-        }   catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return resultList;
-    }
-
-    protected int executeUpdate(String query, Object... parameters) {
-        try (Connection connection = DatabaseConnection.getConnection();
-        PreparedStatement statement = connection.prepareStatement(query)) {
-
-            setParameters(statement, parameters);
-            return statement.executeUpdate();
-        }   catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    private void setParameters(PreparedStatement statement, Object... parameters) throws SQLException {
-        for (int i = 0; i < parameters.length; i++) {
-            statement.setObject(i + 1, parameters[i]);
-        }
-    }
+    Optional<T> getById(int id); // Поиск по ID
 }

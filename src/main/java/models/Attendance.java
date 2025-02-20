@@ -10,7 +10,7 @@ public class Attendance {
     private long subjectId;
     private LocalDate date;
     private AttendanceStatus status;
-    private String comment; // Adding comments due to absence (Optionally)
+    private String comment; // Добавление комментариев из-за отсутствия (опционально)
 
     public Attendance(long id, long studentId, long teacherId, long subjectId, LocalDate date, AttendanceStatus status, String comment) {
         this.id = id;

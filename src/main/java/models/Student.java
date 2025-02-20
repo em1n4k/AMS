@@ -1,28 +1,57 @@
 package models;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+
 public class Student {
 
+    private int id;
+
+    @NotBlank(message = "Имя обязательно")
     private String firstName;
+
+    @NotBlank(message = "Фамилия обязательна")
     private String lastName;
+
+    @Min(value = 16, message = "Минимальный возраст: 16 лет")
+    @Max(value = 100, message = "Максимальный возраст: 100 лет")
+    private int age;
+
+    @Email(message = "Некорректный email")
     private String email;
-    private long id;
+
+    @NotBlank(message = "Номер факультета обязателен")
     private String facultyNumber;
-    private String attendance;
 
-    public Student(long id, String firstName, String lastName, String email, String facultyNumber, String attendance) {
+    private AttendanceStatus attendanceStatus;
 
+    private String phoneNumber;
+
+    public Student(int id, String firstName, String lastName, int age, String email, String facultyNumber, AttendanceStatus attendanceStatus, String phoneNumber) {
+
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.id = id;
+        this.age = age;
+        this.email = email;
         this.facultyNumber = facultyNumber;
-        this.attendance = attendance;
+        this.attendanceStatus = attendanceStatus;
+        this.phoneNumber = phoneNumber;
+
     }
 
-    public long getId() {
+    // no-arg конструктор
+    public Student() {
+
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -38,16 +67,24 @@ public class Student {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(String lastName){
         this.lastName = lastName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getFacultyNumber() {
@@ -58,16 +95,19 @@ public class Student {
         this.facultyNumber = facultyNumber;
     }
 
-    public String getAttendance() {
-        return attendance;
+    public AttendanceStatus getAttendanceStatus() {
+        return attendanceStatus;
     }
 
-    public void setAttendance(String attendance) {
-        if (!attendance.equals("П/Присутствие") && !attendance.equals("О/Отсутствие") && !attendance.equals("УП/Уважительная причина") && !attendance.equals("Б/Болезнь")) {
-            throw new IllegalArgumentException("Установите одно из значений: П/Присутствие, О/Отсутствие, УП/Уважительная причина, Б/Болезнь");
-        }
-        this.attendance = attendance;
+    public void setAttendanceStatus(AttendanceStatus attendanceStatus) {
+        this.attendanceStatus = attendanceStatus;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
