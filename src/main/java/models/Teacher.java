@@ -2,26 +2,26 @@ package models;
 
 public class Teacher {
 
+    private long id;
     private String firstName;
     private String lastName;
-    private int id;
-    private String attendance;
     private String subject;
     private float salary;
 
-    public Teacher(int id, String firstName, String lastName, int age, String facultyNumber, String attendance) {
+    public Teacher(long id, String firstName, String lastName, String subject, float salary) {
 
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.id = id;
-        this.attendance = attendance;
+        this.subject = subject;
+        this.salary = salary;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -41,10 +41,21 @@ public class Teacher {
         this.lastName = lastName;
     }
 
-    public String getAttendance() {
-        return attendance;
+    public String getSubject() {
+        return subject;
     }
 
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public float getSalary() {
+        return salary;
+    }
+
+    public void setSalary(float salary) {
+        this.salary = salary;
+    }
 
 
 }

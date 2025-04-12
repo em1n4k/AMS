@@ -10,7 +10,7 @@ public class DatabaseConnection {
 
     static {
         try {
-            // Reading from the environment variable
+            // Чтение из переменной окружения
             String url = System.getenv("DB_URL");
             String user = System.getenv("DB_USER");
             String password = System.getenv("DB_PASSWORD");
@@ -22,7 +22,7 @@ public class DatabaseConnection {
             connection = DriverManager.getConnection(url, user, password);
             System.out.println("✔ Подключение успешно!");
         } catch (SQLException e) {
-            System.err.println("❌ Ошибка подключения к базе данных: " + e.getMessage());
+            System.err.println("Ошибка подключения к базе данных: " + e.getMessage());
         }
     }
 
