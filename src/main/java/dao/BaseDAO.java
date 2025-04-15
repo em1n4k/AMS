@@ -1,8 +1,11 @@
 package dao;
 
-import java.sql.*;
+import java.util.List;
 
-public abstract class BaseDAO {
-
-    
+public interface BaseDAO<T> {
+    List<T> getAll();
+    void add(T entity);
+    void update(T entity);
+    void delete(T entity);
+    T getById(int id);
 }
