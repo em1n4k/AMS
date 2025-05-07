@@ -1,51 +1,58 @@
 package models;
 
-import jakarta.validation.constraints.*;
-import java.util.regex.Pattern;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 
 public class Student {
 
-    @Positive(message = "ID должен быть положительным")
-    private long id;
+    private int id;
 
     @NotBlank(message = "Имя обязательно")
-    @jakarta.validation.constraints.Pattern(regexp = "[А-Яа-яЁёA-Za-z-'\\s]{2,50}", message = "Недопустимые символы в имени")
     private String firstName;
 
     @NotBlank(message = "Фамилия обязательна")
-    @jakarta.validation.constraints.Pattern(regexp = "[А-Яа-яЁёA-Za-z-'\\s]{2,50}", message = "Недопустимые символы в фамилии")
     private String lastName;
 
-    @NotBlank(message = "Номер студенческого факультета обязателен")
-    @jakarta.validation.constraints.Pattern(regexp = ".*", message = "Специальность и направление")
-    private String facultyNumber;
-
-    @NotNull(message = "Статус посещаемости обязателен")
-    private AttendanceStatus attendance;
-
-    @NotBlank(message = "Год обучения обязателен")
-    @jakarta.validation.constraints.Pattern(regexp = "^\\d{4}-\\d{4}$", message = "Формат: YYYY-YYYY")
-    private String studyYear;
-
-    @Min(value = 16, message = "Минимальный возраст: 16")
-    @Max(value = 100, message = "Максимальный возраст: 75")
+    @Min(value = 16, message = "Минимальный возраст: 16 лет")
+    @Max(value = 100, message = "Максимальный возраст: 100 лет")
     private int age;
 
-    @NotBlank(message = "Email обязателен")
     @Email(message = "Некорректный email")
     private String email;
 
-    @NotBlank(message = "Телефон обязателен")
-    @jakarta.validation.constraints.Pattern(regexp = "^\\+?7\\d{10}$", message = "Формат: +7XXXXXXXXXX или 8XXXXXXXXXX")
+    @NotBlank(message = "Номер факультета обязателен")
+    private String facultyNumber;
+
+    private AttendanceStatus attendanceStatus;
+
     private String phoneNumber;
 
-    // Сеттер для телефона с унификацией формата
-    public void setPhoneNumber(String phoneNumber) {
-        if (phoneNumber.startsWith("8")) {
-            this.phoneNumber = "+7" + phoneNumber.substring(1);
-        } else {
-            this.phoneNumber = phoneNumber;
-        }
+    public Student(int id, String firstName, String lastName, int age, String email, String facultyNumber, AttendanceStatus attendanceStatus, String phoneNumber) {
+
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.email = email;
+        this.facultyNumber = facultyNumber;
+        this.attendanceStatus = attendanceStatus;
+        this.phoneNumber = phoneNumber;
+
+    }
+
+    // no-arg конструктор
+    public Student() {
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -60,24 +67,8 @@ public class Student {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(String lastName){
         this.lastName = lastName;
-    }
-
-    public String getFacultyNumber() {
-        return facultyNumber;
-    }
-
-    public void setFacultyNumber(String facultyNumber) {
-        this.facultyNumber = facultyNumber;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public int getAge() {
@@ -88,26 +79,35 @@ public class Student {
         this.age = age;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFacultyNumber() {
+        return facultyNumber;
+    }
+
+    public void setFacultyNumber(String facultyNumber) {
+        this.facultyNumber = facultyNumber;
+    }
+
+    public AttendanceStatus getAttendanceStatus() {
+        return attendanceStatus;
+    }
+
+    public void setAttendanceStatus(AttendanceStatus attendanceStatus) {
+        this.attendanceStatus = attendanceStatus;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public AttendanceStatus getAttendance() {
-        return attendance;
-    }
-
-    public void setAttendance(AttendanceStatus attendance) {
-        if (!attendance.equals("П/Присутствие") && !attendance.equals("О/Отсутствие") && !attendance.equals("УП/Уважительная причина") && !attendance.equals("Б/Болезнь")) {
-            throw new IllegalArgumentException("Установите одно из значений: П/Присутствие, О/Отсутствие, УП/Уважительная причина, Б/Болезнь");
-        }
-        this.attendance = attendance;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

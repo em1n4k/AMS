@@ -12,6 +12,10 @@ public enum AttendanceStatus {
         this.displayName = displayName;
     }
 
+    public static AttendanceStatus valueOfStatus(String status) {
+        return null;
+    }
+
     public String getDisplayName() {
         return displayName;
     }

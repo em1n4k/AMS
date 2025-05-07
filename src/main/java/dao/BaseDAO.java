@@ -1,11 +1,17 @@
 package dao;
 
-import java.util.List;
+import models.Student;
+
+import java.util.*;
 
 public interface BaseDAO<T> {
-    List<T> getAll();
-    void add(T entity);
-    void update(T entity);
-    void delete(T entity);
-    T getById(int id);
+    List<T> getAll(); // Read
+
+    void add(T entity); // Create
+
+    void update(T entity, String[] params); // Update
+
+    void delete(T entity); // Delete
+
+    Optional<T> getById(int id); // Поиск по ID
 }
