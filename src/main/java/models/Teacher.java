@@ -1,6 +1,7 @@
 package models;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Teacher {
 
@@ -23,6 +24,7 @@ public class Teacher {
         this.salary = salary;
     }
 
+    // no-arg конструктор
     public Teacher () {}
 
     public long getId() {
@@ -58,7 +60,7 @@ public class Teacher {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = this.phoneNumber;
+        this.phoneNumber = phoneNumber;
     }
 
     public void setEmail(String email) {
@@ -87,5 +89,41 @@ public class Teacher {
                 "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", subject='" + subject + '\'' + ", salary=" + salary + '}';
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Teacher teacher = (Teacher) obj;
+        return id == teacher.id;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    // Data similarity
+    public boolean dataSimilarity (Teacher similarData) {
+        if (similarData == null) return false;
+        return firstName.equals(similarData.firstName) && lastName.equals(similarData.lastName) && subject.equals(similarData.subject) && email.equals(similarData.email) && phoneNumber.equals(similarData.phoneNumber);
+    }
+
+    // Searching for similar teachers name, surname and subject to prevent errors if users have same data
+    public boolean hasSameNameSurnameSubject (Teacher sameNameSurnameSubject) {
+        if (sameNameSurnameSubject == null) return false;
+        return firstName.equals(sameNameSurnameSubject.firstName) && lastName.equals(sameNameSurnameSubject.lastName) && subject.equals(sameNameSurnameSubject.subject);
+    }
+
+    // Updating data if Teacher objects have similar ID's
+    public void updateDetailsFrom (Teacher sameId) {
+        if (sameId == null || this.id != sameId.id) {
+            throw new IllegalArgumentException("ID преподавателей не сходится!");
+        }
+        this.firstName = sameId.firstName;
+        this.lastName = sameId.lastName;
+        this.subject = sameId.subject;
+        this.email = sameId.email;
+        this.phoneNumber = sameId.phoneNumber;
+        this.salary = sameId.salary;
+    }
 }
