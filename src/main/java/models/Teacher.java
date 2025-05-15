@@ -8,16 +8,18 @@ public class Teacher {
     private long id;
     private String firstName;
     private String lastName;
+    private String patronymic;
     private String subject;
     private BigDecimal salary;
     private String email;
     private String phoneNumber;
 
-    public Teacher(long id, String firstName, String lastName, String email, String subject, String phoneNumber, BigDecimal salary) {
+    public Teacher(long id, String firstName, String lastName, String patronymic, String email, String subject, String phoneNumber, BigDecimal salary) {
 
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.patronymic = patronymic;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.subject = subject;
@@ -49,6 +51,14 @@ public class Teacher {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
     }
 
     public String getEmail() {
@@ -86,7 +96,7 @@ public class Teacher {
     @Override
     public String toString() {
         return "Teacher{" +
-                "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", subject='" + subject + '\'' + ", salary=" + salary + '}';
+                "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", patronymic='" + patronymic + '\'' + ", subject='" + subject + '\'' + ", salary=" + salary + '}';
     }
 
     @Override
@@ -102,16 +112,16 @@ public class Teacher {
         return Objects.hash(id);
     }
 
-    // Data similarity
-    public boolean dataSimilarity (Teacher similarData) {
-        if (similarData == null) return false;
-        return firstName.equals(similarData.firstName) && lastName.equals(similarData.lastName) && subject.equals(similarData.subject) && email.equals(similarData.email) && phoneNumber.equals(similarData.phoneNumber);
+    // Searching for similar teachers full name, contacts and its subject to prevent errors if users have same data
+    public boolean matchesFullProfile(Teacher other) {
+        if (other == null) return false;
+        return firstName.equals(other.firstName) && lastName.equals(other.lastName) && Objects.equals(patronymic, other.patronymic) && subject.equals(other.subject) && email.equals(other.email) && phoneNumber.equals(other.phoneNumber);
     }
 
-    // Searching for similar teachers name, surname and subject to prevent errors if users have same data
-    public boolean hasSameNameSurnameSubject (Teacher sameNameSurnameSubject) {
-        if (sameNameSurnameSubject == null) return false;
-        return firstName.equals(sameNameSurnameSubject.firstName) && lastName.equals(sameNameSurnameSubject.lastName) && subject.equals(sameNameSurnameSubject.subject);
+    // Searching for similar teachers full name and its subject to prevent errors if users have same data
+    public boolean matchesNameAndSubject (Teacher other) {
+        if (other == null) return false;
+        return firstName.equals(other.firstName) && lastName.equals(other.lastName) && Objects.equals(patronymic, other.patronymic) && subject.equals(other.subject);
     }
 
     // Updating data if Teacher objects have similar ID's
@@ -125,5 +135,19 @@ public class Teacher {
         this.email = sameId.email;
         this.phoneNumber = sameId.phoneNumber;
         this.salary = sameId.salary;
+    }
+
+    // Data validating before initialization
+    public boolean isValid() {
+        return firstName != null && !firstName.isBlank() && lastName != null && !lastName.isBlank() && subject != null && !subject.isBlank() && email != null && !email.isBlank() && phoneNumber != null && !phoneNumber.isBlank();
+    }
+
+    public String getFullName() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(firstName).append(" ").append(lastName);
+        if (patronymic != null && !patronymic.isBlank()) {
+            sb.append(" ").append(patronymic);
+        }
+        return sb.toString();
     }
 }
