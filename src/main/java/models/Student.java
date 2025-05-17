@@ -17,6 +17,9 @@ public class Student {
     @NotBlank(message = "Фамилия обязательна")
     private String lastName;
 
+    @NotBlank(message = "Отчество обязательно")
+    private String patronymic;
+
     @Min(value = 16, message = "Минимальный возраст: 16 лет")
     @Max(value = 100, message = "Максимальный возраст: 100 лет")
     private int age;
@@ -29,13 +32,15 @@ public class Student {
 
     private AttendanceStatus attendanceStatus;
 
+    @NotBlank(message = "Номер телефона обязателен")
     private String phoneNumber;
 
-    public Student(int id, String firstName, String lastName, int age, String email, String facultyNumber, AttendanceStatus attendanceStatus, String phoneNumber) {
+    public Student(int id, String firstName, String lastName, String patronymic, int age, String email, String facultyNumber, AttendanceStatus attendanceStatus, String phoneNumber) {
 
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.patronymic = patronymic;
         this.age = age;
         this.email = email;
         this.facultyNumber = facultyNumber;
@@ -69,6 +74,14 @@ public class Student {
 
     public void setLastName(String lastName){
         this.lastName = lastName;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
     }
 
     public int getAge() {
@@ -112,6 +125,13 @@ public class Student {
     }
 
     @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", patronymic='" + patronymic + '\'' + ", attendanceStatus='" + attendanceStatus + ", age='" + age + ", email='" + email + '\'' + ", facultyNumber='" + facultyNumber + '\'' + ", phoneNumber='" + phoneNumber + '}';
+    }
+
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
@@ -122,6 +142,45 @@ public class Student {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    // Searching for similar students full name, contacts and its subject to prevent errors if users have same data
+    public boolean matchesFullProfile(Student other) {
+        if (other == null) return false;
+        return firstName.equals(other.firstName) && lastName.equals(other.lastName) && Objects.equals(patronymic, other.patronymic) && facultyNumber.equals(other.facultyNumber) && email.equals(other.email) && phoneNumber.equals(other.phoneNumber);
+    }
+
+    // Searching for similar teachers full name and its subject to prevent errors if users have same data
+    public boolean matchesNameAndSubject (Student other) {
+        if (other == null) return false;
+        return firstName.equals(other.firstName) && lastName.equals(other.lastName) && Objects.equals(patronymic, other.patronymic) && facultyNumber.equals(other.facultyNumber);
+    }
+
+    // Updating data if Teacher objects have similar ID's
+    public void updateDetailsFrom (Student sameId) {
+        if (sameId == null || this.id != sameId.id) {
+            throw new IllegalArgumentException("ID студентов не сходится!");
+        }
+        this.firstName = sameId.firstName;
+        this.lastName = sameId.lastName;
+        this.patronymic = sameId.patronymic;
+        this.facultyNumber = sameId.facultyNumber;
+        this.email = sameId.email;
+        this.phoneNumber = sameId.phoneNumber;
+    }
+
+    // Data validating before initialization
+    public boolean isValid() {
+        return firstName != null && !firstName.isBlank() && lastName != null && !lastName.isBlank() && patronymic != null && !patronymic.isBlank() && facultyNumber != null && !facultyNumber.isBlank() && email != null && !email.isBlank() && phoneNumber != null && !phoneNumber.isBlank();
+    }
+
+    public String getFullName() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(firstName).append(" ").append(lastName);
+        if (patronymic != null && !patronymic.isBlank()) {
+            sb.append(" ").append(patronymic);
+        }
+        return sb.toString();
     }
 
 }

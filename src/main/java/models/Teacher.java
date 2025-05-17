@@ -1,17 +1,35 @@
 package models;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Teacher {
 
     private long id;
+
+    @NotBlank(message = "Имя обязательно")
     private String firstName;
+
+    @NotBlank(message = "Фамилия обязательна")
     private String lastName;
+
+    @NotBlank(message = "Отчество обязательно")
     private String patronymic;
+
+    @NotBlank(message = "Название предмета обязательно")
     private String subject;
+
+    @Positive(message = "Зарплата не может быть отрицательной или нулём")
     private BigDecimal salary;
+
+    @Email(message = "Некорректный email")
     private String email;
+
+    @NotBlank(message = "Номер телефона обязателен")
     private String phoneNumber;
 
     public Teacher(long id, String firstName, String lastName, String patronymic, String email, String subject, String phoneNumber, BigDecimal salary) {
@@ -96,7 +114,7 @@ public class Teacher {
     @Override
     public String toString() {
         return "Teacher{" +
-                "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", patronymic='" + patronymic + '\'' + ", subject='" + subject + '\'' + ", salary=" + salary + '}';
+                "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", patronymic='" + patronymic + '\'' + ", subject='" + subject + '\'' + ", salary=" + salary + ", email='" + email + '\'' + ", phoneNumber=" + phoneNumber + '}';
     }
 
     @Override
