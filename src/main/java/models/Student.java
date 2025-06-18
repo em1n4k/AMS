@@ -130,7 +130,6 @@ public class Student {
                 "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", patronymic='" + patronymic + '\'' + ", attendanceStatus='" + attendanceStatus + ", age='" + age + ", email='" + email + '\'' + ", facultyNumber='" + facultyNumber + '\'' + ", phoneNumber='" + phoneNumber + '}';
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -150,13 +149,13 @@ public class Student {
         return firstName.equals(other.firstName) && lastName.equals(other.lastName) && Objects.equals(patronymic, other.patronymic) && facultyNumber.equals(other.facultyNumber) && email.equals(other.email) && phoneNumber.equals(other.phoneNumber);
     }
 
-    // Searching for similar teachers full name and its subject to prevent errors if users have same data
+    // Searching for similar students full name and its subject to prevent errors if users have same data
     public boolean matchesNameAndSubject (Student other) {
         if (other == null) return false;
         return firstName.equals(other.firstName) && lastName.equals(other.lastName) && Objects.equals(patronymic, other.patronymic) && facultyNumber.equals(other.facultyNumber);
     }
 
-    // Updating data if Teacher objects have similar ID's
+    // Updating data if Student objects have similar ID's
     public void updateDetailsFrom (Student sameId) {
         if (sameId == null || this.id != sameId.id) {
             throw new IllegalArgumentException("ID студентов не сходится!");
@@ -169,7 +168,7 @@ public class Student {
         this.phoneNumber = sameId.phoneNumber;
     }
 
-    // Data validating before initialization
+    // Data validation before initialization
     public boolean isValid() {
         return firstName != null && !firstName.isBlank() && lastName != null && !lastName.isBlank() && patronymic != null && !patronymic.isBlank() && facultyNumber != null && !facultyNumber.isBlank() && email != null && !email.isBlank() && phoneNumber != null && !phoneNumber.isBlank();
     }

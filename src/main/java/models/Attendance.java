@@ -10,10 +10,21 @@ public class Attendance {
     private long subjectId;
     private LocalDate date;
     private AttendanceStatus status;
-    private String comment; // Добавление комментариев из-за отсутствия (опционально)
+    private String comment; // Adding comments due to absence (optional)
 
+    // Constructor for UPLOADING from the DATABASE (with id)
     public Attendance(long id, long studentId, long teacherId, long subjectId, LocalDate date, AttendanceStatus status, String comment) {
         this.id = id;
+        this.studentId = studentId;
+        this.teacherId = teacherId;
+        this.subjectId = subjectId;
+        this.date = date;
+        this.status = status;
+        this.comment = comment;
+    }
+
+    // Constructor for CREATING a new object (without id)
+    public Attendance(long studentId, long teacherId, long subjectId, LocalDate date, AttendanceStatus status, String comment) {
         this.studentId = studentId;
         this.teacherId = teacherId;
         this.subjectId = subjectId;
@@ -95,6 +106,6 @@ public class Attendance {
 
     @Override
     public String toString() {
-        return "Attendance{" + "id=" + id + ", studentId=" + studentId + ", teacherId=" + teacherId + ", date=" + date + ", status=" + status + ", comment='" + (comment != null ? comment : "Нет комментария") + '\'' + '}';
+        return "Attendance{" + "id=" + id + ", studentId=" + studentId + ", teacherId=" + teacherId + ", subjectId=" + subjectId + ", date=" + date + ", status=" + status + ", comment='" + (comment == null || comment.isBlank() ? "Нет комментария" : comment) + '\'' + '}';
     }
 }
