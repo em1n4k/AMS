@@ -32,7 +32,7 @@ public class Admin {
         return username;
     }
 
-    public void SetUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -40,7 +40,7 @@ public class Admin {
         return password;
     }
 
-    public void SetPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
