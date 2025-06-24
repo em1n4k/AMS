@@ -17,7 +17,7 @@ public class AttendanceDAO {
 
     private static final Logger logger = Logger.getLogger(AttendanceDAO.class.getName());
 
-    // Getting student by ID
+    // Getting student attendance status by ID
     public Optional<Attendance> getById(long id) {
         String query = "SELECT * FROM attendance WHERE id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -37,7 +37,7 @@ public class AttendanceDAO {
         return Optional.empty();
     }
 
-    // Getting the entire student attendance list
+    // Getting the entire student attendance status list
     public List<Attendance> getAll() {
         List<Attendance> attendanceList = new ArrayList<>();
         String query = "SELECT * FROM attendance";
@@ -57,7 +57,7 @@ public class AttendanceDAO {
         return attendanceList;
     }
 
-    // Adding a new attendance record to the DB
+    // Adding a new attendance status record to the DB
     public void add(Attendance attendance) {
         String query = "INSERT INTO attendance (student_id, teacher_id, subject_id, date, status, comment) VALUES (?,?,?,?,?,?)";
 
@@ -79,7 +79,7 @@ public class AttendanceDAO {
         }
     }
 
-    // Updating the attendance record
+    // Updating the attendance status record
     public void update(Attendance attendance) {
         String query = "UPdATE attendance SET student_id = ?, teacher_id = ?, subject_id = ?, date = ?, status = ?, comment = ? WHERE id = ?";
 
@@ -101,7 +101,7 @@ public class AttendanceDAO {
         }
     }
 
-    // Delete the attendance record
+    // Delete the attendance status record
     public void delete(long id) {
         String query = "DELETE FROM attendance WHERE id = ?";
 
