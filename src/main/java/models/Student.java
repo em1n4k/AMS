@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class Student {
 
-    private int id;
+    private long id;
 
     @NotBlank(message = "Имя обязательно")
     private String firstName;
@@ -35,7 +35,7 @@ public class Student {
     @NotBlank(message = "Номер телефона обязателен")
     private String phoneNumber;
 
-    public Student(int id, String firstName, String lastName, String patronymic, int age, String email, String facultyNumber, AttendanceStatus attendanceStatus, String phoneNumber) {
+    public Student(long id, String firstName, String lastName, String patronymic, int age, String email, String facultyNumber, AttendanceStatus attendanceStatus, String phoneNumber) {
 
         this.id = id;
         this.firstName = firstName;
@@ -52,11 +52,23 @@ public class Student {
     // no-arg конструктор
     public Student() {}
 
-    public int getId() {
+    public Student(long id, String firstName, String lastName, String patronymic, int age, String email, String facultyNumber, String phoneNumber) {
+
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.patronymic = patronymic;
+        this.age = age;
+        this.email = email;
+        this.facultyNumber = facultyNumber;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

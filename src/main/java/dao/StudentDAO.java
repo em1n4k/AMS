@@ -1,53 +1,131 @@
 package dao;
 
+import database.DatabaseConnection;
 import models.Student;
 
-import java.util.List;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class StudentDAO implements BaseDAO<Student> {
+public class StudentDAO {
 
-    private List<Student> studentList = new ArrayList<>();
+    private static final Logger logger = Logger.getLogger(StudentDAO.class.getName());
 
-    public StudentDAO() {}
+    // Get student data by ID
+    public Optional<Student> getById(long id) {
+        String query = "SELECT * FROM student WHERE id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query)) {
 
-    @Override
-    public Optional<Student> getById(int id) {
-        return Optional.ofNullable(studentList.get((int) id));
+            statement.setLong(1,id);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                Student student = extractStudentFromResultSet(resultSet);
+                return Optional.of(student);
+            }
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Ошибка при получении данных студента по ID = " + id, e);
+        }
+
+        return Optional.empty();
     }
 
-    @Override
+    // Get all students data
     public List<Student> getAll() {
+        List<Student> studentList = new ArrayList<>();
+        String query = "SELECT * FROM student";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+        ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Student student = extractStudentFromResultSet(resultSet);
+                studentList.add(student);
+            }
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Ошибка при получении списка данных студентов", e);
+        }
         return studentList;
     }
 
-    @Override
+    // Add student data
     public void add(Student student) {
-        studentList.add(student);
+        String query = "INSERT INTO student (first_name, last_name, patronymic, age, email, faculty_number, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, student.getFirstName());
+            statement.setString(2, student.getLastName());
+            statement.setString(3, student.getPatronymic());
+            statement.setInt(4, student.getAge());
+            statement.setString(5, student.getEmail());
+            statement.setString(6, student.getFacultyNumber());
+            statement.setString(7, student.getPhoneNumber());
+
+            statement.executeUpdate();
+            logger.info("Добавлена информация о новом студенте");
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Ошибка при добавлении данных студента", e);
+        }
     }
 
-    @Override
-    public void update(Student student, String[] params) {
+    // Updating certain student data
+    public void update(Student student) {
+        String query = "UPDATE students SET first_name = ?, last_name = ?, patronymic = ?, age = ?, email = ?, faculty_number = ?, phone_number = ? WHERE id = ?";
 
-        Objects.requireNonNull(params[0], "Имя не может быть null");
-        Objects.requireNonNull(params[1], "Фамилия не может быть null");
-        Objects.requireNonNull(params[2], "Возраст не может быть null");
-        Objects.requireNonNull(params[3], "E-mail не может быть null");
-        Objects.requireNonNull(params[4], "Номер факультета не может быть null");
+        try(Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query)) {
 
-        student.setFirstName(params[0]);
-        student.setLastName(params[1]);
-        student.setAge(Integer.parseInt(params[2]));
-        student.setEmail(params[3]);
-        student.setFacultyNumber(params[4]);
+            statement.setString(1, student.getFirstName());
+            statement.setString(2, student.getLastName());
+            statement.setString(3, student.getPatronymic());
+            statement.setInt(4, student.getAge());
+            statement.setString(5, student.getEmail());
+            statement.setString(6, student.getFacultyNumber());
+            statement.setString(7, student.getPhoneNumber());
 
+            statement.executeUpdate();
+            logger.info("Обновленый данные студента ID = " + student.getId());
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Ошибка при обновлении данных студента", e);
+        }
     }
 
-    @Override
-    public void delete(Student student) {
-        studentList.remove(student);
+    public void delete(long id) {
+        String query = "DELETE FROM student WHERE id = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            logger.info("Удалены данные студента с ID = " + id);
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Ошибка при удалении данных студента", e);
+        }
     }
 
+    private Student extractStudentFromResultSet(ResultSet resultSet) throws SQLException {
+        return new Student(
+                resultSet.getLong("id"),
+                resultSet.getString("first_name"),
+                resultSet.getString("last_name"),
+                resultSet.getString("patronymic"),
+                resultSet.getInt("age"),
+                resultSet.getString("email"),
+                resultSet.getString("faculty_number"),
+                resultSet.getString("phone_number")
+        );
+    }
 }
