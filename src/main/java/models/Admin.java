@@ -1,17 +1,16 @@
 package models;
 
-import jakarta.validation.constraints.NotBlank;
 import java.util.Objects;
 
 public class Admin {
 
-    private int id;
+    private long id;
     private String username;
     private String password;
 
     public Admin() {}
 
-    public Admin(int id, String username, String password) {
+    public Admin(long id, String username, String password) {
 
         this.id = id;
         this.username = username;
@@ -20,11 +19,11 @@ public class Admin {
 
     // Getters & Setters
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -36,7 +35,7 @@ public class Admin {
         this.username = username;
     }
 
-    public String password() {
+    public String getPassword() {
         return password;
     }
 

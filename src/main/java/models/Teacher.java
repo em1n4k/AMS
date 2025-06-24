@@ -47,6 +47,17 @@ public class Teacher {
     // no-arg конструктор
     public Teacher () {}
 
+    public Teacher(long id, String firstName, String lastName, String patronymic, String email, String subject, String phoneNumber) {
+
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.patronymic = patronymic;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.subject = subject;
+    }
+
     public long getId() {
         return id;
     }

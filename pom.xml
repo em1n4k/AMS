@@ -91,7 +91,19 @@
       <version>5.11.1</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>de.svenkubiak</groupId>
+      <artifactId>jBCrypt</artifactId>
+      <version>0.4.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mindrot</groupId>
+      <artifactId>jbcrypt</artifactId>
+      <version>0.4</version>
+    </dependency>
   </dependencies>
+
 
   <build>
     <finalName>attendance-management-system</finalName>

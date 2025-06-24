@@ -1,51 +1,128 @@
 package dao;
 
+import database.DatabaseConnection;
 import models.Teacher;
 
-import java.util.List;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class TeacherDAO implements BaseDAO<Teacher> {
+public class TeacherDAO {
 
-    private List<Teacher> teacherList = new ArrayList<>();
+    private static final Logger logger = Logger.getLogger(TeacherDAO.class.getName());
 
-    public TeacherDAO() {}
+    // Get Teacher data by ID
+    public Optional<Teacher> getById(long id) {
+        String query = "SELECT * FROM teachers WHERE id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
 
-    @Override
-    public Optional<Teacher> getById (int id) {
-        return Optional.ofNullable(teacherList.get((int) id));
+            statement.setLong(1,id);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                Teacher teacher = extractTeacherFromResultSet(resultSet);
+                return Optional.of(teacher);
+            }
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Ошибка при получении данных преподавателя по ID = " + id, e);
+        }
+
+        return Optional.empty();
     }
 
-    @Override
+    // Get all Teachers data
     public List<Teacher> getAll() {
+        List<Teacher> teacherList = new ArrayList<>();
+        String query = "SELECT * FROM teachers";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Teacher teacher = extractTeacherFromResultSet(resultSet);
+                teacherList.add(teacher);
+            }
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Ошибка при получении списка данных преподавателей", e);
+        }
         return teacherList;
     }
 
-    @Override
+    // Add Teacher data
     public void add(Teacher teacher) {
-        teacherList.add(teacher);
+        String query = "INSERT INTO teachers (first_name, last_name, patronymic, age, email, faculty_number, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, teacher.getFirstName());
+            statement.setString(2, teacher.getLastName());
+            statement.setString(3, teacher.getPatronymic());
+            statement.setString(4, teacher.getEmail());
+            statement.setString(5, teacher.getPhoneNumber());
+            statement.setString(6, teacher.getSubject());
+
+            statement.executeUpdate();
+            logger.info("Добавлена информация о новом преподавателе");
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Ошибка при добавлении данных преподавателя", e);
+        }
     }
 
-    @Override
-    public void update(Teacher teacher, String[] params) {
+    // Updating certain Teacher data
+    public void update(Teacher teacher) {
+        String query = "UPDATE teachers SET first_name = ?, last_name = ?, patronymic = ?, email = ?, phone_number = ?, subject = ? WHERE id = ?";
 
-        Objects.requireNonNull(params[0], "Имя не может быть null");
-        Objects.requireNonNull(params[1], "Фамилия не может быть null");
-        Objects.requireNonNull(params[2], "Отчество не может быть null");
-        Objects.requireNonNull(params[3], "Название предмета не может быть null");
-        Objects.requireNonNull(params[4], "E-mail не может быть null");
+        try(Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query)) {
 
-        teacher.setFirstName(params[0]);
-        teacher.setLastName(params[1]);
-        teacher.setPatronymic(params[2]);
-        teacher.setSubject(params[3]);
-        teacher.setEmail(params[4]);
+            statement.setString(1, teacher.getFirstName());
+            statement.setString(2, teacher.getLastName());
+            statement.setString(3, teacher.getPatronymic());
+            statement.setString(4, teacher.getEmail());
+            statement.setString(5, teacher.getPhoneNumber());
+            statement.setString(6, teacher.getSubject());
+
+            statement.executeUpdate();
+            logger.info("Обновлены данные преподавателя с ID = " + teacher.getId());
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Ошибка при обновлении данных преподавателя", e);
+        }
     }
 
-    @Override
-    public void delete(Teacher teacher) {
-        teacherList.remove(teacher);
+    public void delete(long id) {
+        String query = "DELETE FROM teachers WHERE id = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            logger.info("Удалены данные преподавателя с ID = " + id);
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Ошибка при удалении данных преподавателя", e);
+        }
+    }
+
+    private Teacher extractTeacherFromResultSet(ResultSet resultSet) throws SQLException {
+        return new Teacher(
+                resultSet.getLong("id"),
+                resultSet.getString("first_name"),
+                resultSet.getString("last_name"),
+                resultSet.getString("patronymic"),
+                resultSet.getString("email"),
+                resultSet.getString("phone_number"),
+                resultSet.getString("subject")
+        );
     }
 }

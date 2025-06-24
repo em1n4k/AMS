@@ -16,7 +16,7 @@ public class StudentDAO {
 
     // Get student data by ID
     public Optional<Student> getById(long id) {
-        String query = "SELECT * FROM student WHERE id = ?";
+        String query = "SELECT * FROM students WHERE id = ?";
         try (Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = connection.prepareStatement(query)) {
 
@@ -29,7 +29,7 @@ public class StudentDAO {
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Ошибка при получении данных студента по ID = " + id, e);
+            logger.log(Level.SEVERE, "Ошибка при получении данных студента с ID = " + id, e);
         }
 
         return Optional.empty();
@@ -38,7 +38,7 @@ public class StudentDAO {
     // Get all students data
     public List<Student> getAll() {
         List<Student> studentList = new ArrayList<>();
-        String query = "SELECT * FROM student";
+        String query = "SELECT * FROM students";
 
         try (Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = connection.prepareStatement(query);
@@ -57,7 +57,7 @@ public class StudentDAO {
 
     // Add student data
     public void add(Student student) {
-        String query = "INSERT INTO student (first_name, last_name, patronymic, age, email, faculty_number, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO students (first_name, last_name, patronymic, age, email, faculty_number, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = connection.prepareStatement(query)) {
@@ -94,7 +94,7 @@ public class StudentDAO {
             statement.setString(7, student.getPhoneNumber());
 
             statement.executeUpdate();
-            logger.info("Обновленый данные студента ID = " + student.getId());
+            logger.info("Обновлены данные студента с ID = " + student.getId());
 
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Ошибка при обновлении данных студента", e);
@@ -102,7 +102,7 @@ public class StudentDAO {
     }
 
     public void delete(long id) {
-        String query = "DELETE FROM student WHERE id = ?";
+        String query = "DELETE FROM students WHERE id = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = connection.prepareStatement(query)) {
