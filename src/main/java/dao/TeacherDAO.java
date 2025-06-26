@@ -122,7 +122,8 @@ public class TeacherDAO {
                 resultSet.getString("patronymic"),
                 resultSet.getString("email"),
                 resultSet.getString("phone_number"),
-                resultSet.getString("subject")
+                resultSet.getString("subject"),
+                resultSet.getString("password")
         );
     }
 }

@@ -11,31 +11,34 @@ public class Student {
 
     private long id;
 
-    @NotBlank(message = "Имя обязательно")
+    @NotBlank(message = "The name is required")
     private String firstName;
 
-    @NotBlank(message = "Фамилия обязательна")
+    @NotBlank(message = "The surname is required")
     private String lastName;
 
-    @NotBlank(message = "Отчество обязательно")
+    @NotBlank(message = "Patronymic required")
     private String patronymic;
 
-    @Min(value = 16, message = "Минимальный возраст: 16 лет")
-    @Max(value = 100, message = "Максимальный возраст: 100 лет")
+    @Min(value = 16, message = "Minimum age: 16 years")
+    @Max(value = 100, message = "Maximum age: 100 years")
     private int age;
 
-    @Email(message = "Некорректный email")
+    @NotBlank
+    private String password;
+
+    @Email(message = "Incorrect email address")
     private String email;
 
-    @NotBlank(message = "Номер факультета обязателен")
+    @NotBlank(message = "Faculty number is required")
     private String facultyNumber;
 
     private AttendanceStatus attendanceStatus;
 
-    @NotBlank(message = "Номер телефона обязателен")
+    @NotBlank(message = "A phone number is required")
     private String phoneNumber;
 
-    public Student(long id, String firstName, String lastName, String patronymic, int age, String email, String facultyNumber, AttendanceStatus attendanceStatus, String phoneNumber) {
+    public Student(long id, String firstName, String lastName, String patronymic, int age, String email, String password, String facultyNumber, AttendanceStatus attendanceStatus, String phoneNumber) {
 
         this.id = id;
         this.firstName = firstName;
@@ -43,6 +46,7 @@ public class Student {
         this.patronymic = patronymic;
         this.age = age;
         this.email = email;
+        this.password = password;
         this.facultyNumber = facultyNumber;
         this.attendanceStatus = attendanceStatus;
         this.phoneNumber = phoneNumber;
@@ -52,14 +56,16 @@ public class Student {
     // no-arg конструктор
     public Student() {}
 
-    public Student(long id, String firstName, String lastName, String patronymic, int age, String email, String facultyNumber, String phoneNumber) {
+    public Student(long id, String firstName, String lastName, String patronymic, int age, String email, String password, String facultyNumber, String phoneNumber) {
 
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;
         this.age = age;
+        this.password = password;
         this.email = email;
+        this.password = password;
         this.facultyNumber = facultyNumber;
         this.phoneNumber = phoneNumber;
     }
@@ -112,6 +118,14 @@ public class Student {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getFacultyNumber() {
         return facultyNumber;
     }
@@ -153,31 +167,6 @@ public class Student {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    // Searching for similar students full name, contacts and its subject to prevent errors if users have same data
-    public boolean matchesFullProfile(Student other) {
-        if (other == null) return false;
-        return firstName.equals(other.firstName) && lastName.equals(other.lastName) && Objects.equals(patronymic, other.patronymic) && facultyNumber.equals(other.facultyNumber) && email.equals(other.email) && phoneNumber.equals(other.phoneNumber);
-    }
-
-    // Searching for similar students full name and its subject to prevent errors if users have same data
-    public boolean matchesNameAndSubject (Student other) {
-        if (other == null) return false;
-        return firstName.equals(other.firstName) && lastName.equals(other.lastName) && Objects.equals(patronymic, other.patronymic) && facultyNumber.equals(other.facultyNumber);
-    }
-
-    // Updating data if Student objects have similar ID's
-    public void updateDetailsFrom (Student sameId) {
-        if (sameId == null || this.id != sameId.id) {
-            throw new IllegalArgumentException("ID студентов не сходится!");
-        }
-        this.firstName = sameId.firstName;
-        this.lastName = sameId.lastName;
-        this.patronymic = sameId.patronymic;
-        this.facultyNumber = sameId.facultyNumber;
-        this.email = sameId.email;
-        this.phoneNumber = sameId.phoneNumber;
     }
 
     // Data validation before initialization

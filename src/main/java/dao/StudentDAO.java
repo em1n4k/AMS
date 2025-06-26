@@ -125,7 +125,8 @@ public class StudentDAO {
                 resultSet.getInt("age"),
                 resultSet.getString("email"),
                 resultSet.getString("faculty_number"),
-                resultSet.getString("phone_number")
+                resultSet.getString("phone_number"),
+                resultSet.getString("password")
         );
     }
 }

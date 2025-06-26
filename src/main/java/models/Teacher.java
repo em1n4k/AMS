@@ -32,7 +32,10 @@ public class Teacher {
     @NotBlank(message = "Номер телефона обязателен")
     private String phoneNumber;
 
-    public Teacher(long id, String firstName, String lastName, String patronymic, String email, String subject, String phoneNumber, BigDecimal salary) {
+    @NotBlank(message = "Пароль обязателен")
+    private String password;
+
+    public Teacher(long id, String firstName, String lastName, String patronymic, String email, String subject, String phoneNumber, BigDecimal salary , String password) {
 
         this.id = id;
         this.firstName = firstName;
@@ -42,12 +45,13 @@ public class Teacher {
         this.phoneNumber = phoneNumber;
         this.subject = subject;
         this.salary = salary;
+        this.password = password;
     }
 
     // no-arg конструктор
     public Teacher () {}
 
-    public Teacher(long id, String firstName, String lastName, String patronymic, String email, String subject, String phoneNumber) {
+    public Teacher(long id, String firstName, String lastName, String patronymic, String email, String subject, String phoneNumber, String password) {
 
         this.id = id;
         this.firstName = firstName;
@@ -56,6 +60,7 @@ public class Teacher {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.subject = subject;
+        this.password = password;
     }
 
     public long getId() {
@@ -122,6 +127,14 @@ public class Teacher {
         this.salary = salary;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "Teacher{" +
@@ -139,31 +152,6 @@ public class Teacher {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    // Searching for similar teachers full name, contacts and its subject to prevent errors if users have same data
-    public boolean matchesFullProfile(Teacher other) {
-        if (other == null) return false;
-        return firstName.equals(other.firstName) && lastName.equals(other.lastName) && Objects.equals(patronymic, other.patronymic) && subject.equals(other.subject) && email.equals(other.email) && phoneNumber.equals(other.phoneNumber);
-    }
-
-    // Searching for similar teachers full name and its subject to prevent errors if users have same data
-    public boolean matchesNameAndSubject (Teacher other) {
-        if (other == null) return false;
-        return firstName.equals(other.firstName) && lastName.equals(other.lastName) && Objects.equals(patronymic, other.patronymic) && subject.equals(other.subject);
-    }
-
-    // Updating data if Teacher objects have similar ID's
-    public void updateDetailsFrom (Teacher sameId) {
-        if (sameId == null || this.id != sameId.id) {
-            throw new IllegalArgumentException("ID преподавателей не сходится!");
-        }
-        this.firstName = sameId.firstName;
-        this.lastName = sameId.lastName;
-        this.subject = sameId.subject;
-        this.email = sameId.email;
-        this.phoneNumber = sameId.phoneNumber;
-        this.salary = sameId.salary;
     }
 
     // Data validating before initialization
