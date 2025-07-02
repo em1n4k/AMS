@@ -169,11 +169,6 @@ public class Student {
         return Objects.hash(id);
     }
 
-    // Data validation before initialization
-    public boolean isValid() {
-        return firstName != null && !firstName.isBlank() && lastName != null && !lastName.isBlank() && patronymic != null && !patronymic.isBlank() && facultyNumber != null && !facultyNumber.isBlank() && email != null && !email.isBlank() && phoneNumber != null && !phoneNumber.isBlank();
-    }
-
     public String getFullName() {
         StringBuilder sb = new StringBuilder();
         sb.append(firstName).append(" ").append(lastName);

@@ -62,16 +62,4 @@ public class Admin {
         return Objects.hash(id, username);
     }
 
-    // Data validation before initialization
-    public boolean isValid() {
-        return username != null && !username.isBlank() && password != null && !password.isBlank();
-    }
-
-    // Searching for similar admins passwords and usernames to prevent errors if users have same data
-    public boolean matchesFullProfile(Admin other) {
-        if (other == null) return false;
-        return this.id == other.id &&
-                this.username.equals(other.username) &&
-                this.password.equals(other.password);
-    }
 }
