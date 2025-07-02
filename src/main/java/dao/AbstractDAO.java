@@ -1,10 +1,8 @@
 package dao;
 
-import models.Student;
-
 import java.util.*;
 
-public interface BaseDAO<T> {
+public interface AbstractDAO<T> {
     List<T> getAll(); // Read
 
     void add(T entity); // Create
