@@ -7,9 +7,14 @@ public class ValidationResult {
 
     private List<String> errors;
 
-    // Constructor
-    public ValidationResult(List<String> errors) {
-        this.errors = errors;
+    // No-arg constructor initializes the empty error list
+    public ValidationResult() {
+        this.errors = new ArrayList<>();
+    }
+
+    // Add a new error message
+    public void addError(String errorMessage) {
+        errors.add(errorMessage);
     }
 
     // Is everything valid?

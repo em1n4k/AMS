@@ -1,5 +1,10 @@
 package validation;
 
+import java.time.LocalDate;
+import java.time.Period;
+
+import static validation.ValidationRules.*;
+
 /**
  * Abstract base class for all model validators.
  *
@@ -49,4 +54,18 @@ public abstract class AbstractValidator<T> {
         return email != null && email.contains("@");
     }
 
+    protected void validateBirthDate(LocalDate birthDate, ValidationResult result, int minAge, int maxAge) {
+        if (birthDate == null) {
+            result.addError("Birth Date is required.");
+        } else if (birthDate.isAfter(LocalDate.now())) {
+            result.addError("Birt date can't be in the future.");
+        } else {
+            int age = Period.between(birthDate, LocalDate.now()).getYears();
+            if (age < minAge) {
+                result.addError("Age must be between " + minAge + " and " + maxAge);
+            } else if (age > maxAge) {
+                result.addError("Age must be between " + maxAge + " and " + minAge);
+            }
+        }
+    }
 }

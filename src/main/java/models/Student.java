@@ -1,10 +1,10 @@
 package models;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Objects;
 
 public class Student {
@@ -20,9 +20,7 @@ public class Student {
     @NotBlank(message = "Patronymic required")
     private String patronymic;
 
-    @Min(value = 16, message = "Minimum age: 16 years")
-    @Max(value = 100, message = "Maximum age: 100 years")
-    private int age;
+    private LocalDate birthDate;
 
     @NotBlank
     private String password;
@@ -38,13 +36,13 @@ public class Student {
     @NotBlank(message = "A phone number is required")
     private String phoneNumber;
 
-    public Student(long id, String firstName, String lastName, String patronymic, int age, String email, String password, String facultyNumber, AttendanceStatus attendanceStatus, String phoneNumber) {
+    public Student(long id, String firstName, String lastName, String patronymic, LocalDate birthDate, String email, String password, String facultyNumber, AttendanceStatus attendanceStatus, String phoneNumber) {
 
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;
-        this.age = age;
+        this.birthDate = birthDate;
         this.email = email;
         this.password = password;
         this.facultyNumber = facultyNumber;
@@ -56,13 +54,13 @@ public class Student {
     // no-arg конструктор
     public Student() {}
 
-    public Student(long id, String firstName, String lastName, String patronymic, int age, String email, String password, String facultyNumber, String phoneNumber) {
+    public Student(long id, String firstName, String lastName, String patronymic, LocalDate birthDate, String email, String password, String facultyNumber, String phoneNumber) {
 
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;
-        this.age = age;
+        this.birthDate = birthDate;
         this.password = password;
         this.email = email;
         this.password = password;
@@ -102,12 +100,14 @@ public class Student {
         this.patronymic = patronymic;
     }
 
-    public int getAge() {
-        return age;
+
+
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public int getAge() {
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
     public String getEmail() {
@@ -153,7 +153,7 @@ public class Student {
     @Override
     public String toString() {
         return "Student{" +
-                "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", patronymic='" + patronymic + '\'' + ", attendanceStatus='" + attendanceStatus + ", age='" + age + ", email='" + email + '\'' + ", facultyNumber='" + facultyNumber + '\'' + ", phoneNumber='" + phoneNumber + '}';
+                "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", patronymic='" + patronymic + '\'' + ", attendanceStatus='" + attendanceStatus + ", birthDate='" + birthDate + ", email='" + email + '\'' + ", facultyNumber='" + facultyNumber + '\'' + ", phoneNumber='" + phoneNumber + '}';
     }
 
     @Override

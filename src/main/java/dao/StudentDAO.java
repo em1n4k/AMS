@@ -122,7 +122,7 @@ public class StudentDAO {
                 resultSet.getString("first_name"),
                 resultSet.getString("last_name"),
                 resultSet.getString("patronymic"),
-                resultSet.getInt("age"),
+                resultSet.getDate("birth_date").toLocalDate(),
                 resultSet.getString("email"),
                 resultSet.getString("faculty_number"),
                 resultSet.getString("phone_number"),

@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Objects;
 
 public class Teacher {
@@ -19,6 +21,8 @@ public class Teacher {
 
     @NotBlank(message = "Отчество обязательно")
     private String patronymic;
+
+    private LocalDate birthDate;
 
     @NotBlank(message = "Название предмета обязательно")
     private String subject;
@@ -35,12 +39,13 @@ public class Teacher {
     @NotBlank(message = "Пароль обязателен")
     private String password;
 
-    public Teacher(long id, String firstName, String lastName, String patronymic, String email, String subject, String phoneNumber, BigDecimal salary , String password) {
+    public Teacher(long id, String firstName, String lastName, String patronymic, LocalDate birthDate, String email, String subject, String phoneNumber, BigDecimal salary , String password) {
 
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;
+        this.birthDate = birthDate;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.subject = subject;
@@ -51,7 +56,7 @@ public class Teacher {
     // no-arg конструктор
     public Teacher () {}
 
-    public Teacher(long id, String firstName, String lastName, String patronymic, String email, String subject, String phoneNumber, String password) {
+    public Teacher(long id, String firstName, String lastName, String patronymic, LocalDate birthDate, String email, String subject, String phoneNumber, String password) {
 
         this.id = id;
         this.firstName = firstName;
@@ -95,6 +100,13 @@ public class Teacher {
         this.patronymic = patronymic;
     }
 
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public int getAge() {
+        return Period.between(birthDate, LocalDate.now()).getYears();
+    }
     public String getEmail() {
         return email;
     }
@@ -138,7 +150,7 @@ public class Teacher {
     @Override
     public String toString() {
         return "Teacher{" +
-                "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", patronymic='" + patronymic + '\'' + ", subject='" + subject + '\'' + ", salary=" + salary + ", email='" + email + '\'' + ", phoneNumber=" + phoneNumber + '}';
+                "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", patronymic='" + patronymic + '\'' + ", birthDate='" + '\'' + ", subject='" + subject + '\'' + ", salary=" + salary + ", email='" + email + '\'' + ", phoneNumber=" + phoneNumber + '}';
     }
 
     @Override
@@ -152,11 +164,6 @@ public class Teacher {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    // Data validating before initialization
-    public boolean isValid() {
-        return firstName != null && !firstName.isBlank() && lastName != null && !lastName.isBlank() && subject != null && !subject.isBlank() && email != null && !email.isBlank() && phoneNumber != null && !phoneNumber.isBlank();
     }
 
     public String getFullName() {

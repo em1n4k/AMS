@@ -31,7 +31,6 @@ public class StudentService {
         target.setFirstName(source.getFirstName());
         target.setLastName(source.getLastName());
         target.setPatronymic(source.getPatronymic());
-        target.setAge(source.getAge());
         target.setEmail(source.getEmail());
         target.setPassword(source.getPassword());
         target.setPhoneNumber(source.getPhoneNumber());

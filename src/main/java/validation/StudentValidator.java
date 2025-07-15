@@ -1,43 +1,41 @@
 package validation;
 
 import models.Student;
-import java.util.List;
-import java.util.ArrayList;
 
 public class StudentValidator extends AbstractValidator<Student> {
 
     @Override
-    public ValidationResult validate(Student student) {
-        List<String> errors = new ArrayList<>();
+    public ValidationResult validate (Student student) {
+        ValidationResult result = new ValidationResult();
 
         if (!notBlank(student.getFirstName())) {
-            errors.add("First name is required");
+            result.addError("First name is required.");
         }
 
         if (!notBlank(student.getLastName())) {
-            errors.add("Last name is required");
+            result.addError("Last name is required.");
         }
 
         if (!notBlank(student.getPatronymic())) {
-            errors.add("Patronymic/Full name is required");
+            result.addError("Patronymic is required.");
         }
 
-        if (!isInRange(student.getAge(), 16, 100)) {
-            errors.add("Age must be between 16 and 100");
-        }
+        // Birth Date validation
+        validateBirthDate(
+                 student.getBirthDate(),
+                 result,
+                 ValidationRules.STUDENT_MIN_AGE,
+                ValidationRules.STUDENT_MAX_AGE
+        );
 
         if (!isValidEmail(student.getEmail())) {
-            errors.add("Email is not valid.");
-        }
-
-        if (!notBlank(student.getFacultyNumber())) {
-            errors.add("Faculty number is required");
+            result.addError("Email is not valid.");
         }
 
         if (!notBlank(student.getPhoneNumber())) {
-            errors.add("Phone number is required");
+            result.addError("Phone number is required.");
         }
 
-        return new ValidationResult(errors);
+        return result;
     }
 }
