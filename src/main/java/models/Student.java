@@ -100,10 +100,12 @@ public class Student {
         this.patronymic = patronymic;
     }
 
-
-
     public LocalDate getBirthDate() {
         return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
 
     public int getAge() {

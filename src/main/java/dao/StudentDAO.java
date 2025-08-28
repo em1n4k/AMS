@@ -2,6 +2,7 @@ package dao;
 
 import database.DatabaseConnection;
 import models.Student;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class StudentDAO {
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Ошибка при получении данных студента с ID = " + id, e);
+            logger.log(Level.SEVERE, "Error when receiving student data with ID = " + id, e);
         }
 
         return Optional.empty();
@@ -50,14 +51,14 @@ public class StudentDAO {
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Ошибка при получении списка данных студентов", e);
+            logger.log(Level.SEVERE, "Error when getting the list of student data", e);
         }
         return studentList;
     }
 
     // Add student data
     public void add(Student student) {
-        String query = "INSERT INTO students (first_name, last_name, patronymic, age, email, faculty_number, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO students (first_name, last_name, patronymic, birth_date, email, faculty_number, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = connection.prepareStatement(query)) {
@@ -65,22 +66,22 @@ public class StudentDAO {
             statement.setString(1, student.getFirstName());
             statement.setString(2, student.getLastName());
             statement.setString(3, student.getPatronymic());
-            statement.setInt(4, student.getAge());
+            statement.setDate(4, Date.valueOf(student.getBirthDate()));
             statement.setString(5, student.getEmail());
             statement.setString(6, student.getFacultyNumber());
-            statement.setString(7, student.getPhoneNumber());
+            statement.setString(7, hashPassword(student.getPassword()));
 
             statement.executeUpdate();
-            logger.info("Добавлена информация о новом студенте");
+            logger.info("Added information about a new student");
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Ошибка при добавлении данных студента", e);
+            logger.log(Level.SEVERE, "Error when adding student data", e);
         }
     }
 
     // Updating certain student data
     public void update(Student student) {
-        String query = "UPDATE students SET first_name = ?, last_name = ?, patronymic = ?, age = ?, email = ?, faculty_number = ?, phone_number = ? WHERE id = ?";
+        String query = "UPDATE students SET first_name = ?, last_name = ?, patronymic = ?, birth_date = ?, email = ?, faculty_number = ? WHERE id = ?";
 
         try(Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = connection.prepareStatement(query)) {
@@ -88,16 +89,17 @@ public class StudentDAO {
             statement.setString(1, student.getFirstName());
             statement.setString(2, student.getLastName());
             statement.setString(3, student.getPatronymic());
-            statement.setInt(4, student.getAge());
+            statement.setDate(4, Date.valueOf(student.getBirthDate()));
             statement.setString(5, student.getEmail());
             statement.setString(6, student.getFacultyNumber());
-            statement.setString(7, student.getPhoneNumber());
+            statement.setString(7, hashPassword(student.getPassword()));
+            statement.setLong(8, student.getId());
 
             statement.executeUpdate();
-            logger.info("Обновлены данные студента с ID = " + student.getId());
+            logger.info("The student's ID data has been updated = " + student.getId());
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Ошибка при обновлении данных студента", e);
+            logger.log(Level.SEVERE, "Error updating student data", e);
         }
     }
 
@@ -109,10 +111,26 @@ public class StudentDAO {
 
             statement.setLong(1, id);
             statement.executeUpdate();
-            logger.info("Удалены данные студента с ID = " + id);
+            logger.info("Student's data with ID has been deleted = " + id);
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Ошибка при удалении данных студента", e);
+            logger.log(Level.SEVERE, "Error when deleting student data", e);
+        }
+    }
+
+    // Password updating method
+    public void updatePassword(long id, String newPassword) {
+        String query = "UPDATE students SET password = ? WHERE id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, hashPassword(newPassword));
+            statement.setLong(2, id);
+
+            statement.executeUpdate();
+            logger.info ("Password updated for student with ID = " + id);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error updating password", e);
         }
     }
 
@@ -128,5 +146,9 @@ public class StudentDAO {
                 resultSet.getString("phone_number"),
                 resultSet.getString("password")
         );
+    }
+
+    private String hashPassword(String plainPassword) {
+        return BCrypt.hashpw(plainPassword, BCrypt.gensalt());
     }
 }
