@@ -81,7 +81,7 @@ public class StudentDAO {
 
     // Updating certain student data
     public void update(Student student) {
-        String query = "UPDATE students SET first_name = ?, last_name = ?, patronymic = ?, birth_date = ?, email = ?, faculty_number = ? WHERE id = ?";
+        String query = "UPDATE students SET first_name = ?, last_name = ?, patronymic = ?, birth_date = ?, email = ?, faculty_number = ?, phone_number = ?, password = ? WHERE id = ?";
 
         try(Connection connection = DatabaseConnection.getConnection();
         PreparedStatement statement = connection.prepareStatement(query)) {
@@ -92,8 +92,15 @@ public class StudentDAO {
             statement.setDate(4, Date.valueOf(student.getBirthDate()));
             statement.setString(5, student.getEmail());
             statement.setString(6, student.getFacultyNumber());
-            statement.setString(7, hashPassword(student.getPassword()));
-            statement.setLong(8, student.getId());
+
+            // Phone number can be null
+            if (student.getPhoneNumber() != null && !student.getPhoneNumber().isEmpty()) {
+                statement.setString(7, student.getPhoneNumber());
+            } else {
+                statement.setNull(7, Types.VARCHAR);
+            }
+            statement.setString(8, hashPassword(student.getPassword()));
+            statement.setLong(9, student.getId());
 
             statement.executeUpdate();
             logger.info("The student's ID data has been updated = " + student.getId());
@@ -103,6 +110,7 @@ public class StudentDAO {
         }
     }
 
+    // Deleting students data
     public void delete(long id) {
         String query = "DELETE FROM students WHERE id = ?";
 
